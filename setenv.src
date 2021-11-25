@@ -1,3 +1,0 @@
-export CARAVEL_ROOT=/home/nguyendao/SKY130/gg-mpw3-2021/fuserisc/caravel
-export PDK_ROOT=/home/nguyendao/SKY130/gg-mpw3-2021/eFPGA_v3_caravel
-export OPENLANE_ROOT=/home/nguyendao/SKY130/gg-mpw3-2021/OpenLane
