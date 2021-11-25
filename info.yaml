@@ -1,0 +1,18 @@
+---
+project:
+  description: "FuseRISC - A dual core eFPGA DISC enabled SoC (ver2)"
+  foundry: "SkyWater"
+  git_url: "https://github.com/nguyendao-uom/fuserisc_ver2.git"
+  organization: ""
+  organization_url: ""
+  owner: "Nguyen Dao"
+  process: "SKY130"
+  project_name: "FuseRISC"
+  project_id: "00000000"
+  tags:
+    - "Open MPW"
+  category: "FuseRISC Caravel User Project"
+  top_level_netlist: "caravel/verilog/gl/caravel.v"
+  user_level_netlist: "verilog/gl/user_project_wrapper.v"
+  version: "2.00"
+  cover_image: "pics/fuserisc_ver2.png"
