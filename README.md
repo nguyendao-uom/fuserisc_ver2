@@ -5,6 +5,10 @@
 | :exclamation: Important Note            |
 |-----------------------------------------|
 
+   <p align="center">
+   <img src="./docs/source/fuserisc_ver2.png" width="50%" height="50%">
+   </p>
+
 ## Please fill in your project documentation in this README.md file 
 
 
