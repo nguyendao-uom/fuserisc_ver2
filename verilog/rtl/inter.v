@@ -1,3 +1,21 @@
+// SPDX-FileCopyrightText: 
+// 2021 Andrew Attwood
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+
 `timescale 1 ps / 1 ps
 
 module inter #(
@@ -52,12 +70,14 @@ module inter #(
         logic [(SLAVES * MASTERS) - 1:0] arbiter_request;
         wire [(SLAVES * MASTERS) - 1:0] arbiter_grant;
        //parameter [$clog2(SLAVES):0] PARAM_SLAVE_ADDR = 2'b10;
-      
+        
                 for (i = 0; i < SLAVES; i = i + 1)  
                 always @(*)
                 begin
-                        for (int j = 0; j < MASTERS; j = j + 1)
+                        integer j;
+                        for (j = 0; j < MASTERS; j = j + 1) begin
                                 arbiter_request[(i * MASTERS) + j] = (  master_data_addr_i[(j * MASTER_ADDR_WIDTH + (SLAVE_ADDR_WIDTH )) +: $clog2(SLAVES)]   == i )? master_data_req_i[j] : 0;
+                        end
                 end
                 for (i = 0; i < MASTERS; i = i + 1)
                         begin : sv2v_autoblock_1
@@ -66,7 +86,7 @@ module inter #(
                                 local_arb_grant = 1'b0;
                                 begin : sv2v_autoblock_2
                                         reg signed [31:0] j;
-                                        for (int j = 0; j < SLAVES; j = j + 1)
+                                        for (j = 0; j < SLAVES; j = j + 1)
                                                 local_arb_grant = local_arb_grant | arbiter_grant[(j * MASTERS) + i];
                                 end
                                 arb_to_master_grant[i] = local_arb_grant;
@@ -99,7 +119,8 @@ module inter #(
                                         slave_data_be_o[a * (DATA_WIDTH / 8)+:DATA_WIDTH / 8] = 0;
                                         slave_data_wdata_o[a * DATA_WIDTH+:DATA_WIDTH] = 0;
                                         slave_data_req_o[a] = 0;
-                                        for (int  t = 0; t < MASTERS; t = t + 1)
+                                        integer t;
+                                        for ( t = 0; t < MASTERS; t = t + 1)
                                         begin : slave_out2
                                                 
                                 
@@ -126,7 +147,8 @@ module inter #(
                                 master_data_rdata_o[i * DATA_WIDTH+:DATA_WIDTH] = 0;
                                 master_data_rvalid_o[i] = 0;
                                 master_data_gnt_o[i] = 0;
-                                for (int k = 0; k < SLAVES; k = k + 1)
+                                integer k;
+                                for (k = 0; k < SLAVES; k = k + 1)
                                 begin
                                         if (arbiter_grant[(k * MASTERS) + i] == 1'b1) 
                                         begin 
@@ -140,6 +162,55 @@ module inter #(
         endgenerate
 endmodule
 
+
+/**
+The MIT License (MIT)
+
+Copyright (c) 2013 Berin Martini
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+ * Module: arbiter
+ *
+ * Description:
+ *  A look ahead, round-robing parameterized arbiter.
+ *
+ * <> request
+ *  each bit is controlled by an actor and each actor can 'request' ownership
+ *  of the shared resource by bring high its request bit.
+ *
+ * <> grant
+ *  when an actor has been given ownership of shared resource its 'grant' bit
+ *  is driven high
+ *
+ * <> select
+ *  binary representation of the grant signal (optional use)
+ *
+ * <> active
+ *  is brought high by the arbiter when (any) actor has been given ownership
+ *  of shared resource.
+ *
+ *
+ * Created: Sat Jun  1 20:26:44 EDT 2013
+ *
+ * Author:  Berin Martini // berin.martini@gmail.com
+ */
 
 module arbiter     #(
     parameter NUM_PORTS=5

@@ -14,7 +14,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 `default_nettype none
-
 /*
  *-------------------------------------------------------------
  *
@@ -94,8 +93,8 @@ eFPGA_CPU_top inst_eFPGA_CPU_top (
 	.wbs_adr_i(wbs_adr_i),
 	.wbs_ack_o(wbs_ack_o),
 	.wbs_dat_o(wbs_dat_o),
-	.la_data_out(la_data_out[2:0]),
-	.la_data_in(la_data_in),
+	.la_data_out(la_data_out[6:4]),
+	.la_data_in(la_data_in[3:0]),
 	.io_in(io_in),
 	.io_out(io_out),
 	.io_oeb(io_oeb),

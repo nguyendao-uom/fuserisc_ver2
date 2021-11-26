@@ -1,3 +1,20 @@
+// SPDX-FileCopyrightText: 
+// 2021 Andrew Attwood
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 module peripheral (
 	clk,
 	reset,
@@ -38,11 +55,11 @@ module peripheral (
 	wire rx_overrun_error_uart;
 	wire rx_frame_error_uart;
 	reg [22:0] configuration;
-	always @(clk) begin : debug
+	always @(posedge clk) begin : debug
 		if (tx_busy_uart == 1'b1)
 			$display("%t: Writing date %h to uart", $time, slave_data_wdata_i);
 	end
-	always @(clk) begin : setregister
+	always @(posedge clk) begin : setregister
 		if (reset) begin
 			slave_data_rvalid_o <= 0;
 			slave_data_gnt_o <= 0;
@@ -90,7 +107,7 @@ module peripheral (
 		end
 	end
 	reg [DATA_WIDTH - 1:0] uart_data_recv;
-	always @(clk) begin : uart_data
+	always @(posedge clk) begin : uart_data
 		if (m_axis_tvalid_uart)
 			uart_data_recv <= m_axis_tdata_uart;
 	end

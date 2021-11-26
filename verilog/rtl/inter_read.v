@@ -1,3 +1,20 @@
+// SPDX-FileCopyrightText: 
+// 2021 Andrew Attwood
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 `timescale 1 ps / 1 ps
 
 module inter_read #(
@@ -45,7 +62,8 @@ module inter_read #(
                 for (i = 0; i < ROSLAVES; i = i + 1)  
                 always @(*)
                 begin
-                        for (int j = 0; j < ROMASTERS; j = j + 1)
+                        integer j;
+                        for (j = 0; j < ROMASTERS; j = j + 1)
                                 arbiter_request[(i * ROMASTERS) + j] = (  master_data_addr_i[(j * ROMASTER_ADDR_WIDTH + (SLAVE_ADDR_WIDTH )) +: $clog2(ROSLAVES)]   == i )? master_data_req_i[j] : 0;
                 end
                 for (i = 0; i < ROMASTERS; i = i + 1)
@@ -55,7 +73,8 @@ module inter_read #(
                                 local_arb_grant = 1'b0;
                                 begin : sv2v_autoblock_2
                                         reg signed [31:0] j;
-                                        for (int j = 0; j < ROSLAVES; j = j + 1)
+                                    
+                                        for (j = 0; j < ROSLAVES; j = j + 1)
                                                 local_arb_grant = local_arb_grant | arbiter_grant[(j * ROMASTERS) + i];
                                 end
                                 arb_to_master_grant[i] = local_arb_grant;
@@ -88,7 +107,8 @@ module inter_read #(
                                         
 
                                         slave_data_req_o[a] = 0;
-                                        for (int  t = 0; t < ROMASTERS; t = t + 1)
+                                        integer t;
+                                        for (t = 0; t < ROMASTERS; t = t + 1)
                                         begin : slave_out2
                                                 
                                 
@@ -115,7 +135,8 @@ module inter_read #(
                                 master_data_rdata_o[i * DATA_WIDTH+:DATA_WIDTH] = 0;
                                 master_data_rvalid_o[i] = 0;
                                 master_data_gnt_o[i] = 0;
-                                for (int k = 0; k < ROSLAVES; k = k + 1)
+                                integer k;
+                                for (k = 0; k < ROSLAVES; k = k + 1)
                                 begin
                                         if (arbiter_grant[(k * ROMASTERS) + i] == 1'b1) 
                                         begin 

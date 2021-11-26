@@ -1,3 +1,19 @@
+// SPDX-FileCopyrightText: 
+// 2021 Andrew Attwood
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0
 `timescale 1 ps / 1 ps
 
 
@@ -103,16 +119,16 @@ parameter SLAVE_ADDR_WIDTH = 10, ADDR_WIDTH=12, MASTERS=5, DATA_WIDTH=32, SLAVES
     output eFPGA_en_2_o;
     output [1:0] eFPGA_operator_2_o;
     output [3:0] eFPGA_delay_2_o;
-/*
-    input [ADDR_WIDTH-1:0]ext_data_addr_i;
-    input [3:0]ext_data_be_i;
-    output [31:0]ext_data_rdata_o;
-    input ext_data_req_i;
-    output ext_data_rvalid_o;
-    input [31:0]ext_data_wdata_i;
-    input ext_data_we_i;
-    output ext_data_gnt_o;
-*/
+
+    wire [ADDR_WIDTH-1:0]ext_data_addr_i;
+    wire [3:0]ext_data_be_i;
+    wire [31:0]ext_data_rdata_o;
+    wire ext_data_req_i;
+    wire ext_data_rvalid_o;
+    wire  [31:0]ext_data_wdata_i;
+    wire ext_data_we_i;
+    wire ext_data_gnt_o;
+
     input rxd_uart;
     output txd_uart;
     input rxd_uart_to_mem;
@@ -216,11 +232,7 @@ parameter SLAVE_ADDR_WIDTH = 10, ADDR_WIDTH=12, MASTERS=5, DATA_WIDTH=32, SLAVES
         .eFPGA_operator_o(eFPGA_operator_1_o),
         .eFPGA_delay_o(eFPGA_delay_1_o));
 
-    wire [ROMASTERS - 1:0] master_data_req_to_inter_ro;
-    wire [(ROMASTERS * ADDR_WIDTH) - 1:0] master_data_addr_to_inter_ro;
-    wire [(ROMASTERS * DATA_WIDTH) - 1:0] master_data_rdata_to_inter_ro;
-    wire [ROMASTERS - 1:0] master_data_rvalid_to_inter_ro;
-    wire [ROMASTERS - 1:0] master_data_gnt_to_inter_ro;
+
 
 
 
@@ -231,7 +243,7 @@ parameter SLAVE_ADDR_WIDTH = 10, ADDR_WIDTH=12, MASTERS=5, DATA_WIDTH=32, SLAVES
          (.boot_addr_i(32'h0),
           .clk_i(clk_i),
           .cluster_id_i(6'd0),
-          .core_id_i(4'1),
+          .core_id_i(4'h1),
           
           .data_addr_o(master_data_addr_to_inter[ (2 * ADDR_WIDTH) - 1 : 1 * ADDR_WIDTH]),
           .data_be_o(master_data_be_to_inter[( (2 * (DATA_WIDTH / 8))) - 1 : 1 * (DATA_WIDTH / 8)]),
@@ -336,6 +348,8 @@ parameter SLAVE_ADDR_WIDTH = 10, ADDR_WIDTH=12, MASTERS=5, DATA_WIDTH=32, SLAVES
     wire [(ROMASTERS * DATA_WIDTH) - 1:0] master_data_rdata_to_inter_ro;
     wire [ROMASTERS - 1:0] master_data_rvalid_to_inter_ro;
     wire [ROMASTERS - 1:0] master_data_gnt_to_inter_ro;
+
+
 
     wire [ROSLAVES - 1:0] slave_data_req_to_inter_ro;
     wire [(ROSLAVES * SLAVE_ADDR_WIDTH) - 1:0] slave_data_addr_to_inter_ro;
