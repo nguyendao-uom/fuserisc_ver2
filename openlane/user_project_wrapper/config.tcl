@@ -55,7 +55,7 @@ set ::env(MACRO_PLACEMENT_CFG) $script_dir/macro.cfg
 ### Black-box verilog and views
 set ::env(VERILOG_FILES_BLACKBOX) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
-	../verilog/rtl/eFPGA_CPU_top.synthesis.v"
+	../verilog/rtl/eFPGA_CPU_top.v"
 
 #	$script_dir/../../verilog/rtl/user_proj_example.v"
 
